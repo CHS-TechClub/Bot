@@ -1,3 +1,6 @@
+#Config Security
+config.json
+
 # Logs
 logs
 *.log
