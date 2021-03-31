@@ -2,11 +2,5 @@
   "prefix": "",
   "token": "",
   "newsChannel": "",
-  "homeGuild": "",
-  "mysql": {
-    "host": "",
-    "username": "",
-    "password": "",
-    "database": ""
-  }
+  "homeGuild": ""
 }

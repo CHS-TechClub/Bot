@@ -9,9 +9,16 @@ class Bot extends Client {
     this.djs = require('discord.js');
     this.config = require("./config.json");
     this.fs = require("fs");
-    this.mysql = require("mysql");
+    this.express = require('express');
+    this.app = this.express();
+    this.http = require('http').Server(this.app);
+    this.ioClient = require('socket.io-client');
+    this.newsSocket;
+    this.NewsManager = require("./utils/news.js");
     this.db; //defined in registerDatabaseConnection() just initalized here
     this.commands = new Map();
+
+    this.port = process.env.PORT || 8001;
 
   }
 
@@ -54,7 +61,7 @@ class Bot extends Client {
 
       let registered = [];
       listeners.forEach((file) => {
-        if (!file.endsWith(".js")) return
+        if (!file.endsWith(".js")) return;
         let path = require(`./listeners/${file}`);
         let name = file.split(".")[0];
 
@@ -66,22 +73,43 @@ class Bot extends Client {
     });
   }
 
-  async registerDatabaseConnection() {
-    let mysqlInfo = this.config.mysql;
-    this.db = this.mysql.createConnection({
-      host: mysqlInfo.host,
-      user: mysqlInfo.username,
-      password: mysqlInfo.password,
-      database: mysqlInfo.databse
+  async registerApp() {
+    let bot = this;
+    this.app.get('/', (req, res) => {
+      res.send("connected");
+    })
+
+    this.app.get('/status', (req, res) => {
+      let data = [bot.ping, "ok"];
+      res.send(data);
+    })
+
+    this.http.listen(this.port, () => {
+      console.log(`Listening status container of port: ${this.port}`);
+      console.log(this.http.settings);
+    });
+  }
+
+  async registerSocketClient() {
+    let path = "ws://chstechclub.herokuapp.com/";
+    //Kinda bad but works for now...
+    if (this.port == 8001) path = "ws://localhost:8000/";
+    this.newsSocket = this.ioClient.connect(path, {reconnect: true}); //TODO: logic for localhost or the website url
+
+    this.newsSocket.on('connect', (socket) => {
+      console.log(`[Socket] Connected to the website! ${path}`);
     });
 
-    console.log("[Database] Connected!");
+    this.newsSocket.on('disconnect', () => {
+      console.log("[Socket] Disconnected from the website!");
+    })
   }
 
   async start() {
     await this.registerCommands();
     await this.registerListeners();
-    await this.registerDatabaseConnection();
+    await this.registerApp();
+    await this.registerSocketClient();
     await this.login(this.config.token);
   }
 

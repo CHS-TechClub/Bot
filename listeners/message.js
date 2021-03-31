@@ -5,7 +5,7 @@ module.exports = async (bot, msg) => {
 
   let newsChannel = bot.config.newsChannel;
   if (msg.channel.id == newsChannel) {
-    // TODO: parse this for website!
+    await bot.NewsManager.broadcastNews(bot.newsSocket, msg);
     return;
   }
 
