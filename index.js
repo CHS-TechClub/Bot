@@ -9,6 +9,7 @@ class Bot extends Client {
     this.djs = require('discord.js');
     this.config = require("./config.json");
     this.fs = require("fs");
+    this.toHTML = require('discord-markdown');
     this.express = require('express');
     this.app = this.express();
     this.http = require('http').Server(this.app);
@@ -86,7 +87,6 @@ class Bot extends Client {
 
     this.http.listen(this.port, () => {
       console.log(`Listening status container of port: ${this.port}`);
-      console.log(this.http.settings);
     });
   }
 
