@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "discord-markdown": "^2.4.2",
-    "discord.js": "^11.5.1",
+    "discord.js": "^12.5.3",
     "express": "^4.17.1",
     "fs": "0.0.1-security",
     "socket.io-client": "^4.0.0"
