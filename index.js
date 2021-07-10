@@ -92,8 +92,6 @@ class Bot extends Client {
 
   async registerSocketClient() {
     let path = "ws://chstechclub.herokuapp.com/";
-    //Kinda bad but works for now...
-    if (this.port == 8001) path = "ws://localhost:8000/";
     this.newsSocket = this.ioClient.connect(path, {reconnect: true}); //TODO: logic for localhost or the website url
 
     this.newsSocket.on('connect', (socket) => {
