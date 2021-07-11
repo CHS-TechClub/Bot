@@ -3,10 +3,16 @@ const { hasRole } = require("../utils/permissions");
 
 module.exports.run = async (bot, msg, args) => {
 
-  if (hasRole(msg, "Council Member")) {
-    msg.channel.send("You have permission!");
+  if (hasRole(msg.member, msg.guild, "Council Member")) {
+
+    let chsGuild = bot.guilds.cache.get(bot.config.homeGuild);
+    chsGuild.members.cache.each(member => {
+      
+    })
+    msg.react("✅").catch((e) => {});
+
   } else {
-    msg.channel.send("You do not have permission!");
+    msg.channel.send("Only Council Members can perform this command!");
   }
 
 }
