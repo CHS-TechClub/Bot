@@ -37,7 +37,7 @@ class Bot extends Client {
       for (const file of files) {
         if (!file.endsWith(".js")) return;
         let path = require(`./commands/${file}`);
-        let name = file.split(".")[0];
+        let name = file.split(".")[0].toLowerCase();
         let aliases = path.aliases;
 
         this.commands.set(name, path);
