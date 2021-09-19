@@ -7,7 +7,7 @@ class Bot extends Client {
     super();
 
     this.djs = require('discord.js');
-    this.config = require("./config.json");
+    this.config = {};
     this.fs = require("fs");
     this.toHTML = require('discord-markdown');
     this.express = require('express');
@@ -27,6 +27,11 @@ class Bot extends Client {
   USE ASYNC
   NodeJs is single threaded so we want to queue this stuff so it takes less CPU cycles to start the Bot
   */
+
+  async registerConfig() {
+    if (!this.fs.existsSync("./config.json")) return;
+    this.config = require("./config.json");
+  }
 
   async registerCommands() {
     this.fs.readdir("./commands/", async (e, files) => {
@@ -104,6 +109,7 @@ class Bot extends Client {
   }
 
   async start() {
+    await this.registerConfig();
     await this.registerCommands();
     await this.registerListeners();
     await this.registerApp();
