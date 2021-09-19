@@ -108,7 +108,7 @@ class Bot extends Client {
     await this.registerListeners();
     await this.registerApp();
     await this.registerSocketClient();
-    await this.login(this.config.token);
+    await this.login(this.config.token || process.env.token);
   }
 
 }
